@@ -128,6 +128,51 @@ $app->post('/userlogin', function(Request $request, Response $response) {
 
 });
 
+$app->post('/createNote', function(Request $request, Response $response){
+   
+    if(!haveEmptyParameters(array('noteTitle', 'noteDesc', 'noteCreatedId'), $request, $response)) {
+
+        $requestData = $request->getParsedBody();
+
+        $noteTitle = $requestData['noteTitle'];
+        $noteDesc = $requestData['noteDesc'];
+        $noteCreatedId = $requestData['noteCreatedId'];
+
+        $db = new DbOperations;
+
+        $result = $db->createNote($noteTitle, $noteDesc, $noteCreatedId);
+//return $response->write(json_encode($result));
+        if($result == NOTE_CREATED) {
+
+            $message = array();
+            $message['error'] = false;
+            $message['message'] = 'Note created successfully';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(201);
+
+        } else if($result == NOTE_FAILURE) {
+
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Some error occured';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+
+        }  
+
+    }
+    return $response
+                ->withHeader('Content-type', 'application/json')
+                ->withStatus(422); 
+});
 
 function haveEmptyParameters($requiredParams, $request, $response) {
     $error = false;

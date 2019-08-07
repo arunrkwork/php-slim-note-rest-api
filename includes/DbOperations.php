@@ -66,5 +66,18 @@
             $stmt->store_result();
             return $stmt->num_rows > 0;
         }
+            
+        public function createNote($noteTitle, $noteDesc, $noteCreatedId) {
+            $stmt = $this->con->prepare("insert into mt_notes 
+                            (note_title, note_desc, note_created_id)
+                            values (?, ?, ?)");
+            $stmt->bind_param("ssi", $noteTitle, $noteDesc, $noteCreatedId);
+            
+            if($stmt->execute()) {
+                return NOTE_CREATED;                         
+            } else {
+                return NOTE_FAILURE;
+            }
+        }
 
     }

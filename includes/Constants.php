@@ -12,3 +12,7 @@
     define('USER_AUTHENTICATED', 201);
     define('USER_NOT_FOUND', 202);
     define('USER_PASSWORD_DO_NOT_MATCH', 203);
+
+
+    define('NOTE_CREATED', 100);
+    define('NOTE_FAILURE', 103);
